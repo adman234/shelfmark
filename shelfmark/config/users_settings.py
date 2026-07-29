@@ -79,12 +79,14 @@ _SEARCH_PREFERENCE_PROVIDER_KEYS = {
 }
 _SEARCH_PREFERENCE_VALIDATABLE_KEYS = {
     "SEARCH_MODE",
+    "DEFAULT_CONTENT_TYPE",
     "DEFAULT_RELEASE_SOURCE",
     "DEFAULT_RELEASE_SOURCE_AUDIOBOOK",
     "SHOW_COMBINED_SELECTOR",
     "FORCE_COMBINED_SEARCH",
     *_SEARCH_PREFERENCE_PROVIDER_KEYS,
 }
+_CONTENT_TYPE_VALUES = {"ebook", "audiobook"}
 
 _USERS_HEADING_DESCRIPTION_BY_AUTH_MODE = {
     "builtin": (
@@ -193,6 +195,12 @@ def validate_search_preference_value(key: str, value: Any) -> tuple[Any, str | N
         if normalized_mode not in _SEARCH_MODE_VALUES:
             return value, "SEARCH_MODE must be 'direct' or 'universal'"
         return normalized_mode, None
+
+    if key == "DEFAULT_CONTENT_TYPE":
+        normalized_content_type = normalized_value.lower()
+        if normalized_content_type not in _CONTENT_TYPE_VALUES:
+            return value, "DEFAULT_CONTENT_TYPE must be 'ebook' or 'audiobook'"
+        return normalized_content_type, None
 
     if key in _SEARCH_PREFERENCE_PROVIDER_KEYS:
         if normalized_value == "":

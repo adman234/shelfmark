@@ -1115,6 +1115,11 @@ def api_config() -> Response | tuple[Response, int]:
         db_user_id = get_session_db_user_id(session)
 
         search_mode = app_config.get("SEARCH_MODE", "universal", user_id=db_user_id)
+        default_content_type = app_config.get(
+            "DEFAULT_CONTENT_TYPE",
+            "ebook",
+            user_id=db_user_id,
+        )
         default_release_source = app_config.get(
             "DEFAULT_RELEASE_SOURCE",
             "",
@@ -1155,6 +1160,7 @@ def api_config() -> Response | tuple[Response, int]:
             "supported_formats": app_config.SUPPORTED_FORMATS,
             "supported_audiobook_formats": app_config.SUPPORTED_AUDIOBOOK_FORMATS,
             "search_mode": search_mode,
+            "default_content_type": default_content_type,
             "metadata_sort_options": get_provider_sort_options(metadata_ui_provider),
             "metadata_search_fields": get_provider_search_fields(metadata_ui_provider),
             "default_release_source": default_release_source,

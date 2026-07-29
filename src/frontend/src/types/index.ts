@@ -274,6 +274,7 @@ export interface AppConfig {
   supported_formats: string[];
   supported_audiobook_formats: string[]; // Audiobook formats (m4b, mp3)
   search_mode: SearchMode;
+  default_content_type?: ContentType; // Default tab (ebook/audiobook) the search page opens with
   metadata_sort_options: SortOption[];
   metadata_search_fields: MetadataSearchField[];
   default_release_source?: string; // Default tab in ReleaseModal (e.g., 'direct_download')

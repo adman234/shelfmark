@@ -303,7 +303,7 @@ function App() {
   });
 
   // Content type state (ebook vs audiobook) - defined before useSearch since it's passed to it
-  const { contentType, setContentType, combinedMode, setCombinedMode } =
+  const { contentType, setContentType, combinedMode, setCombinedMode, applyServerDefault } =
     useContentTypePreferences();
 
   const {
@@ -815,6 +815,12 @@ function App() {
         setConfiguredAudiobookMetadataProvider(metadataProviderState.configured_provider_audiobook);
         setConfiguredCombinedMetadataProvider(metadataProviderState.configured_provider_combined);
 
+        // Only apply the server-configured default content type on first load, and
+        // only if the user hasn't already picked a tab (URL param or a prior visit).
+        if (mode === 'initial') {
+          applyServerDefault(cfg.default_content_type);
+        }
+
         // Show onboarding modal on first run (settings enabled but not completed yet)
         if (mode === 'initial' && cfg.settings_enabled && !cfg.onboarding_complete) {
           setOnboardingOpen(true);
@@ -847,6 +853,7 @@ function App() {
       }
     },
     [
+      applyServerDefault,
       combinedMode,
       effectiveContentType,
       getDefaultMode,

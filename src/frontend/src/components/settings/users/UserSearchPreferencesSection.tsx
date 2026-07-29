@@ -14,6 +14,7 @@ interface UserSearchPreferencesSectionProps {
 
 type SearchSettingKey =
   | 'SEARCH_MODE'
+  | 'DEFAULT_CONTENT_TYPE'
   | 'METADATA_PROVIDER'
   | 'METADATA_PROVIDER_AUDIOBOOK'
   | 'DEFAULT_RELEASE_SOURCE'
@@ -28,6 +29,18 @@ const fallbackSearchModeField: SelectFieldConfig = {
   options: [
     { value: 'direct', label: 'Direct' },
     { value: 'universal', label: 'Universal' },
+  ],
+};
+
+const fallbackDefaultContentTypeField: SelectFieldConfig = {
+  type: 'SelectField',
+  key: 'DEFAULT_CONTENT_TYPE',
+  label: 'Default Content Type',
+  description: 'Which tab (ebook or audiobook) the search page opens with by default.',
+  value: 'ebook',
+  options: [
+    { value: 'ebook', label: 'Ebook' },
+    { value: 'audiobook', label: 'Audiobook' },
   ],
 };
 
@@ -100,6 +113,11 @@ export const UserSearchPreferencesSection = ({
   const preferenceKeySet = new Set(searchPreferences.keys ?? []);
 
   const searchModeField = getFieldByKey(fields, 'SEARCH_MODE', fallbackSearchModeField);
+  const defaultContentTypeField = getFieldByKey(
+    fields,
+    'DEFAULT_CONTENT_TYPE',
+    fallbackDefaultContentTypeField,
+  );
   const metadataProviderField = getFieldByKey(
     fields,
     'METADATA_PROVIDER',
@@ -155,6 +173,7 @@ export const UserSearchPreferencesSection = ({
 
   const searchModeValue = readValue('SEARCH_MODE', 'universal');
   const effectiveSearchMode = normalizeSearchMode(searchModeValue);
+  const defaultContentTypeValue = readValue('DEFAULT_CONTENT_TYPE', 'ebook');
   const metadataProviderValue = readValue('METADATA_PROVIDER');
   const metadataProviderAudiobookValue = readValue('METADATA_PROVIDER_AUDIOBOOK');
   const defaultReleaseSourceValue = readValue('DEFAULT_RELEASE_SOURCE');
@@ -162,6 +181,8 @@ export const UserSearchPreferencesSection = ({
 
   const canOverrideSearchMode =
     isUserOverridable('SEARCH_MODE') && preferenceKeySet.has('SEARCH_MODE');
+  const canOverrideDefaultContentType =
+    isUserOverridable('DEFAULT_CONTENT_TYPE') && preferenceKeySet.has('DEFAULT_CONTENT_TYPE');
   const canOverrideMetadataProvider =
     isUserOverridable('METADATA_PROVIDER') && preferenceKeySet.has('METADATA_PROVIDER');
   const canOverrideAudiobookMetadataProvider =
@@ -175,6 +196,7 @@ export const UserSearchPreferencesSection = ({
 
   if (
     !canOverrideSearchMode &&
+    !canOverrideDefaultContentType &&
     !canOverrideMetadataProvider &&
     !canOverrideAudiobookMetadataProvider &&
     !canOverrideDefaultReleaseSource &&
@@ -204,6 +226,29 @@ export const UserSearchPreferencesSection = ({
             value={searchModeValue}
             onChange={(value) => setUserSettings((prev) => ({ ...prev, SEARCH_MODE: value }))}
             disabled={Boolean(searchModeField.fromEnv)}
+          />
+        </FieldWrapper>
+      )}
+
+      {canOverrideDefaultContentType && (
+        <FieldWrapper
+          field={defaultContentTypeField}
+          resetAction={
+            isOverridden('DEFAULT_CONTENT_TYPE')
+              ? {
+                  disabled: Boolean(defaultContentTypeField.fromEnv),
+                  onClick: () => resetKeys(['DEFAULT_CONTENT_TYPE']),
+                }
+              : undefined
+          }
+        >
+          <SelectField
+            field={defaultContentTypeField}
+            value={defaultContentTypeValue}
+            onChange={(value) =>
+              setUserSettings((prev) => ({ ...prev, DEFAULT_CONTENT_TYPE: value }))
+            }
+            disabled={Boolean(defaultContentTypeField.fromEnv)}
           />
         </FieldWrapper>
       )}

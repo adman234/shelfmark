@@ -372,6 +372,20 @@ def test_on_save_users_normalizes_search_mode_override():
     assert result["values"]["SEARCH_MODE"] == "universal"
 
 
+def test_on_save_users_normalizes_default_content_type_override():
+    result = users_settings_module._on_save_users({"DEFAULT_CONTENT_TYPE": " AUDIOBOOK "})
+
+    assert result["error"] is False
+    assert result["values"]["DEFAULT_CONTENT_TYPE"] == "audiobook"
+
+
+def test_on_save_users_rejects_invalid_default_content_type_override():
+    result = users_settings_module._on_save_users({"DEFAULT_CONTENT_TYPE": "podcast"})
+
+    assert result["error"] is True
+    assert "DEFAULT_CONTENT_TYPE must be 'ebook' or 'audiobook'" in result["message"]
+
+
 def test_on_save_users_rejects_invalid_metadata_provider_override(monkeypatch):
     monkeypatch.setattr(
         "shelfmark.metadata_providers.is_provider_registered",

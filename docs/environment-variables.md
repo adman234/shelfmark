@@ -313,6 +313,7 @@ Default language filter for searches.
 | Variable | Description | Type | Default |
 |----------|-------------|------|---------|
 | `SEARCH_MODE` | How you want to search for and download books. | string (choice) | `universal` |
+| `DEFAULT_CONTENT_TYPE` | Which tab (ebook or audiobook) the search page opens with by default. | string (choice) | `ebook` |
 | `AA_DEFAULT_SORT` | Default sort order for search results. | string (choice) | `relevance` |
 | `SHOW_RELEASE_SOURCE_LINKS` | Show clickable release-source links in release and details modals. Metadata provider links stay enabled. | boolean | `true` |
 | `SHOW_COMBINED_SELECTOR` | Show the option to search for and download both a book and audiobook together. | boolean | `true` |
@@ -335,6 +336,16 @@ How you want to search for and download books.
 - **Type:** string (choice)
 - **Default:** `universal`
 - **Options:** `direct` (Direct), `universal` (Universal)
+
+#### `DEFAULT_CONTENT_TYPE`
+
+**Default Content Type**
+
+Which tab (ebook or audiobook) the search page opens with by default.
+
+- **Type:** string (choice)
+- **Default:** `ebook`
+- **Options:** `ebook` (Ebook), `audiobook` (Audiobook)
 
 #### `AA_DEFAULT_SORT`
 
