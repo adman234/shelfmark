@@ -268,8 +268,12 @@ def prowlarr_config_settings() -> list[SettingsField]:
             key="PROWLARR_MAM_ID",
             label="MAM Session ID",
             description=(
-                "The mam_id value MyAnonamouse shows when you create a session. Leave empty "
-                "to turn enrichment off."
+                "The mam_id value MyAnonamouse shows when you create a session. MAM locks "
+                "each session to one IP or ASN, so reusing Prowlarr's or another client's "
+                "session often fails with a 403: you will likely need a separate session "
+                "for Shelfmark if it reaches MAM from another IP (different host, VPN or "
+                "proxy) or the existing session is ASN-locked to another network. Leave "
+                "empty to turn enrichment off."
             ),
             show_when={"field": "PROWLARR_ENABLED", "value": True},
         ),
