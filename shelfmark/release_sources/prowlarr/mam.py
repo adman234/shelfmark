@@ -152,7 +152,13 @@ class MamClient:
             verify=get_ssl_verify(url),
         )
         if response.status_code == _HTTP_FORBIDDEN:
-            msg = "MyAnonamouse rejected the session ID (403)"
+            # MAM explains itself in the body (bad cookie, IP/ASN mismatch, ...).
+            reply = " ".join(response.text.split())[:200]
+            msg = (
+                "MyAnonamouse rejected the session ID (403). Sessions only work from the "
+                "IP/ASN they are locked to, so check Shelfmark reaches MAM from that address"
+                + (f". MAM said: {reply}" if reply else "")
+            )
             raise MamAuthError(msg)
         response.raise_for_status()
         return response.json()
