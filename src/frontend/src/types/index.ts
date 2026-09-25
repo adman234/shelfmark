@@ -32,6 +32,7 @@ export interface Book {
   status_message?: string; // Detailed status message (e.g., "Trying Libgen (2/5)")
   added_time?: number; // Timestamp when added to queue
   content_type?: string; // "ebook", "audiobook", or related book subtype
+  library?: LibraryOwnership; // "already in your library" flags from the library check
   source?: string; // Release source handler (e.g., "direct_download", "prowlarr")
   source_display_name?: string; // Human-readable source name (e.g., "Direct Download")
   // Metadata provider fields (used in universal search mode)
@@ -276,6 +277,14 @@ export interface QueuedDownloadResult {
 }
 
 export type RequestSubmissionResult = RequestRecord | QueuedDownloadResult;
+
+/** How the library holds a book, per format: owned outright, or inside a collection. */
+export type LibraryHolding = 'owned' | 'collection';
+
+export interface LibraryOwnership {
+  ebook?: LibraryHolding | null;
+  audiobook?: LibraryHolding | null;
+}
 
 export type BooksOutputMode = 'folder' | 'booklore' | 'email';
 
